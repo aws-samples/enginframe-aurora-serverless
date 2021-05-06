@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?><ef:spooler xmlns:ef="http://www.enginframe.com/2000/EnginFrame" server="${EF_SPOOLER_DIR}" ttl="7d">
+    <ef:apply-acl priority="allow" select="allow-to[applications:all-users]">
+        <ef:service hidden="false" id="batch_builtin_job_submission.published">
+        <ef:name>Job Submission</ef:name>
+        <ef:info hidden="true" id="sm_service_js">
+                <script type="text/javascript">/** Insert custom JavaScript here **/
+</script>
+            </ef:info>
+        <ef:info hidden="true" id="sm_service_css">
+                <style type="text/css">/** Insert custom CSS here **/
+</style>
+            </ef:info>
+        <ef:info id="important_info">
+            <p style="text-align:justify">
+                <strong>NOTE:</strong> This service is a sample.
+            </p>
+            <p style="text-align:justify">
+                The purpose of this service is to show how to create a simple HPC Service for job submission and how to use some common options in Action and Job scripts.
+            </p>
+            <p style="text-align:justify">
+                <strong>WARNING:</strong> Publishing it to users can potentially expose the system to a security threat, since a malicious user can submit and execute a custom script or a custom executable uploaded in his HOME directory.
+            </p>
+        </ef:info>
+        <ef:option-group collapsed="false" collapsible="false" id="group_1" label="LAUNCH PARAMETERS">
+            <ef:option class="ef-srv-opt-text" id="JOB_NAME" label="Job Name:" type="text" width="50">MyJob</ef:option>
+            <ef:option class="ef-srv-opt-text" id="PROJECT" label="Project Name:" type="text" width="50"/>
+        </ef:option-group>
+        <ef:option-group collapsed="false" collapsible="false" id="group_2" label="APPLICATION PARAMETERS">
+            <ef:option class="ef-srv-opt-rfb" id="COMMAND" label="Application Executable:" multi="false" required="true" target="file" type="rfb" width="50"/>
+            <ef:info id="info_1">
+                <p>
+                        <strong>Note</strong>: the executable must be available on all execution nodes.</p>
+            </ef:info>
+            <ef:option class="ef-srv-opt-text" id="APP_OPTIONS" label="Application Options:" type="text" width="50"/>
+            <ef:option class="ef-srv-opt-rfb" id="INPUT_FILE" label="Input File:" multi="false" target="file" type="rfb" width="50"/>
+            <ef:info id="info_2">
+                <p>
+                        <strong>Note</strong>: specify an absolute path for the input file, reachable from all execution nodes.</p>
+            </ef:info>
+            <ef:info id="info_3">
+                <p>
+                    Specify an execution directory, shared among all execution nodes and EnginFrame server.<br/>
+                    If no execution directory is specified the application will be executed inside a scratch area.
+                </p>
+            </ef:info>
+            <ef:option class="ef-srv-opt-rfb" id="EXEC_DIR" label="Execution Directory:" multi="false" target="directory" type="rfb" width="50"/>
+            <ef:info id="info_4">
+                <p>
+                        <strong>Note</strong>: the scratch area will be automatically cleaned up after one week.</p>
+            </ef:info>
+        </ef:option-group>
+        <ef:option-group collapsed="false" collapsible="false" id="group_3" label="JOB PARAMETERS">
+            <ef:option class="ef-srv-opt-static-list" id="PROCESSORS" label="Number of Processors:" multi="false" type="list">
+                <ef:option label="--" selected="true"/>
+                <ef:option label="1">1</ef:option>
+                <ef:option label="2">2</ef:option>
+                <ef:option label="4">4</ef:option>
+                <ef:option label="8">8</ef:option>
+                <ef:option label="16">16</ef:option>
+                <ef:option label="32">32</ef:option>
+                <ef:option label="64">64</ef:option>
+            </ef:option>
+            <ef:option class="ef-srv-opt-list-of-clusters" id="CLUSTER" label="Cluster:" multi="false" type="list">
+                <ef:embed id="list.of.clusters"/>
+            </ef:option>
+            <ef:option class="ef-srv-opt-list-of-queues" id="QUEUE" label="Computing Queue:" multi="false" type="list">
+                <ef:embed id="list.of.queues"/>
+            </ef:option>
+            <ef:option class="ef-srv-opt-list-of-hosts" id="HOST" label="List of Hosts:" multi="false" type="list">
+                <ef:embed id="list.of.hosts"/>
+            </ef:option>
+            <ef:option class="ef-srv-opt-text" id="JOB_OPTIONS" label="Additional Job Options:" type="text" width="50"/>
+        </ef:option-group>
+        <ef:metadata attribute="SM_SERVICE_NAME">Job Submission</ef:metadata>
+        <ef:metadata attribute="SM_SERVICE_VISIBILITY">true</ef:metadata>
+        <ef:metadata attribute="SM_SERVICE_ID">batch_builtin_job_submission</ef:metadata>
+        <ef:metadata attribute="SM_SERVICE_TYPE">batch</ef:metadata>
+        <ef:metadata attribute="SM_SERVICE_AUTHOR">NICE</ef:metadata>
+        <ef:metadata attribute="SM_SERVICE_LAST_MODIFIED_BY">NICE</ef:metadata>
+        <ef:metadata attribute="SM_SERVICE_CREATION_TIME">2014-08-21T17:29:37+02:00</ef:metadata>
+        <ef:metadata attribute="SM_SERVICE_LAST_MODIFIED_TIME">2015-02-04T17:14:04+01:00</ef:metadata>
+        <ef:metadata attribute="SM_EF_VERSION">2015.1.38221</ef:metadata>
+        <ef:metadata attribute="SM_SERVICE_EMBEDDABLE">false</ef:metadata>
+        <ef:metadata attribute="EF_SERVICEPROFILE_ENABLE">true</ef:metadata>
+        <ef:metadata attribute="EF_SERVICE_RESUBMIT_ENABLE">false</ef:metadata>
+        <ef:metadata attribute="EF_SERVICE_RESUBMIT_REUSE_SPOOLER">false</ef:metadata>
+        <ef:metadata attribute="EF_SERVICE_RESUBMIT_RESET_SPOOLER_TTL">false</ef:metadata>
+        <ef:metadata attribute="SM_SERVICE_USER_GROUPS">all-users</ef:metadata>
+            <ef:metadata attribute="SM_SERVICE_PUBLISHED_FOLDER">batch</ef:metadata>
+            <ef:action id="submit" label="Submit" load-conf="${EF_DATA_ROOT}/plugins/applications/services/catalog/batch/batch_builtin_job_submission/conf/service.efconf" output-mode="normal" result="text/xml">
+          PATH="${EF_ROOT}/plugins/applications/bin:${PATH}"
+          export PATH
+          "${SM_CATALOG_BATCH}/${SM_SERVICE_ID}/bin/action-script.sh"
+        </ef:action>
+    </ef:service>
+    </ef:apply-acl>
+</ef:spooler>
