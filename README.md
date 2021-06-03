@@ -1,4 +1,4 @@
-Blog post link: <TODO: link of published blog post>
+Blog post link: https://aws.amazon.com/blogs/hpc/highly-available-hpc-infrastructure-on-aws
 
 # HPC infrastructure with EnginFrame, AWS ParallelCluster, and Amazon Aurora
 
